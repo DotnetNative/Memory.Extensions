@@ -16,7 +16,7 @@ public unsafe static class MemEx
     [MethImpl(AggressiveInlining)]
     public static T* NewAlloc<T>(T* from) where T : unmanaged
     {
-        T* to = (T*)Marshal.AllocCoTaskMem(sizeof(T));
+        var to = (T*)Marshal.AllocCoTaskMem(sizeof(T));
         *to = *from;
         return to;
     }
@@ -32,7 +32,7 @@ public unsafe static class MemEx
     [MethImpl(AggressiveInlining)]
     public static T* AllocFrom<T>(T[] arr) where T : unmanaged
     {
-        T* ptr = Alloc<T>(arr.Length);
+        var ptr = Alloc<T>(arr.Length);
         Copy(ptr, arr);
         return ptr;
     }
@@ -42,7 +42,7 @@ public unsafe static class MemEx
     [MethImpl(AggressiveInlining)]
     public static void Free(params void*[] ptrs)
     {
-        foreach (void* ptr in ptrs)
+        foreach (var ptr in ptrs)
             Marshal.FreeCoTaskMem((nint)ptr);
     }
     [MethImpl(AggressiveInlining)]
@@ -100,7 +100,7 @@ public unsafe static class MemEx
     [MethImpl(AggressiveInlining)]
     public static byte[] Read(void* ptr, int len)
     {
-        byte[] bytes = new byte[len];
+        var bytes = new byte[len];
         Copy(bytes, ptr);
         return bytes;
     }
@@ -108,7 +108,7 @@ public unsafe static class MemEx
     [MethImpl(AggressiveInlining)]
     public static T[] Read<T>(void* ptr, int len) where T : unmanaged
     {
-        T[] bytes = new T[len];
+        var bytes = new T[len];
         Copy(bytes, ptr);
         return bytes;
     }
