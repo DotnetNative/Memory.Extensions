@@ -1,6 +1,4 @@
 ﻿using System.Runtime.InteropServices;
-using System;
-using System.Runtime.CompilerServices;
 
 using MethImpl = System.Runtime.CompilerServices.MethodImplAttribute;
 using static System.Runtime.CompilerServices.MethodImplOptions;
@@ -124,4 +122,39 @@ public unsafe static class MemEx
 
     [MethImpl(AggressiveInlining)]
     public static byte[] ReadStruct<T>(T str) where T : unmanaged => Read<byte>(&str, sizeof(T));
+
+    [MethImpl(AggressiveInlining)]
+    public static bool Compare(byte* ptr, byte* with, int len)
+    {
+        for (int i = 0; i < len; i++)
+            if (ptr[i] != with[i])
+                return false;
+
+        return true;
+    }
+
+    [MethImpl(AggressiveInlining)]
+    public static bool Compare(void* ptr, void* with, int len) => Compare((byte*)ptr, (byte*)with, len);
+
+    [MethImpl(AggressiveInlining)]
+    public static bool Compare(void* ptr, byte[] with, int len)
+    {
+        fixed (void* withPtr = with)
+            return Compare(ptr, withPtr, len);
+    }
+
+    [MethImpl(AggressiveInlining)]
+    public static bool Compare(byte[] arr, byte[] with, int len)
+    {
+        fixed (void* withPtr = with)
+        fixed (void* ptr = arr)
+            return Compare(ptr, withPtr, len);
+    }
+
+    [MethImpl(AggressiveInlining)]
+    public static bool Compare(byte[] arr, byte* with, int len)
+    {
+        fixed (void* ptr = arr)
+            return Compare(ptr, with, len);
+    }
 }
