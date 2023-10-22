@@ -137,18 +137,18 @@ public unsafe static class MemEx
     public static bool Compare(void* ptr, void* with, int len) => Compare((byte*)ptr, (byte*)with, len);
 
     [MethImpl(AggressiveInlining)]
-    public static bool Compare(void* ptr, byte[] with, int len)
+    public static bool Compare(void* ptr, byte[] with)
     {
         fixed (void* withPtr = with)
-            return Compare(ptr, withPtr, len);
+            return Compare(ptr, withPtr, with.Length);
     }
 
     [MethImpl(AggressiveInlining)]
-    public static bool Compare(byte[] arr, byte[] with, int len)
+    public static bool Compare(byte[] arr, byte[] with)
     {
         fixed (void* withPtr = with)
         fixed (void* ptr = arr)
-            return Compare(ptr, withPtr, len);
+            return Compare(ptr, withPtr, with.Length);
     }
 
     [MethImpl(AggressiveInlining)]

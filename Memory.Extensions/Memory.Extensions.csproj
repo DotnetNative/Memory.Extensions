@@ -6,15 +6,16 @@
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PackageId>Yotic.Memory.Extensions</PackageId>
-    <Title>Memory</Title>
-    <Version>1.0.2</Version>
+    <Title>Memory.Extensions</Title>
+    <Version>1.0.4</Version>
     <Authors>Yotic</Authors>
     <Company></Company>
-    <Description>Memory extensions for manipulate pointers</Description>
+    <Description>Memory utils for convenient work with memory, arrays and pointers</Description>
     <PackageReadmeFile>Pack.md</PackageReadmeFile>
-    <PackageProjectUrl>https://github.com/Yoticc/Memory.Extensions</PackageProjectUrl>
-    <RepositoryType>https://github.com/Yoticc/Memory.Extensions</RepositoryType>
+    <PackageProjectUrl></PackageProjectUrl>
+    <RepositoryType></RepositoryType>
     <PackageTags>memory, utils, util</PackageTags>
+    <RepositoryUrl>https://github.com/Yoticc/Memory.Extensions</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,1 +1,1 @@
-Memory utils
+Memory utils for convenient work with memory, arrays and pointers
