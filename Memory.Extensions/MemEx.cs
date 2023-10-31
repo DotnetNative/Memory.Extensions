@@ -1,4 +1,6 @@
-﻿using System.Runtime.InteropServices;
+﻿global using static Memory.MemEx;
+
+using System.Runtime.InteropServices;
 
 using MethImpl = System.Runtime.CompilerServices.MethodImplAttribute;
 using static System.Runtime.CompilerServices.MethodImplOptions;
@@ -7,20 +9,28 @@ namespace Memory;
 public unsafe static class MemEx
 {
     [MethImpl(AggressiveInlining)]
-    public static T* New<T>() where T : unmanaged => NewAlloc<T>();
+    public static T* New<T>() where T : unmanaged => Alloc<T>();
     [MethImpl(AggressiveInlining)]
-    public static T* New<T>(T val) where T : unmanaged => NewAlloc(&val);
+    public static T* New<T>(T val) where T : unmanaged => NewAlloc(val);
 
     [MethImpl(AggressiveInlining)]
     public static T* NewAlloc<T>(T* from) where T : unmanaged
     {
-        var to = (T*)Marshal.AllocCoTaskMem(sizeof(T));
+        var to = Alloc<T>();
         *to = *from;
         return to;
     }
 
     [MethImpl(AggressiveInlining)]
-    public static T* NewAlloc<T>() where T : unmanaged => (T*)Marshal.AllocCoTaskMem(sizeof(T));
+    public static T* NewAlloc<T>(T from) where T : unmanaged
+    {
+        var to = Alloc<T>();
+        *to = from;
+        return to;
+    }
+
+    [MethImpl(AggressiveInlining)]
+    public static T* Alloc<T>() where T : unmanaged => (T*)Marshal.AllocCoTaskMem(sizeof(T));
 
     [MethImpl(AggressiveInlining)]
     public static byte* Alloc(int count) => (byte*)Marshal.AllocCoTaskMem(count);
@@ -152,9 +162,24 @@ public unsafe static class MemEx
     }
 
     [MethImpl(AggressiveInlining)]
+    public static bool Compare(byte[] arr, byte[] with, int len)
+    {
+        fixed (void* withPtr = with)
+        fixed (void* ptr = arr)
+            return Compare(ptr, withPtr, len);
+    }
+
+    [MethImpl(AggressiveInlining)]
     public static bool Compare(byte[] arr, byte* with, int len)
     {
         fixed (void* ptr = arr)
             return Compare(ptr, with, len);
+    }
+
+    [MethImpl(AggressiveInlining)]
+    public static bool Compare(byte* arr, byte[] with, int len)
+    {
+        fixed (void* ptr = with)
+            return Compare(arr, ptr, len);
     }
 }
