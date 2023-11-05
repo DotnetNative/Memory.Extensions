@@ -182,4 +182,220 @@ public unsafe static class MemEx
         fixed (void* ptr = with)
             return Compare(arr, ptr, len);
     }
+
+    [MethImpl(AggressiveInlining)]
+    public static bool Contains(bool* arr, int length, bool val)
+    {
+        for (int i = 0; i < length; i++)
+            if (arr[i] == val)
+                return true;
+        return false;
+    }
+
+    [MethImpl(AggressiveInlining)]
+    public static bool Contains(byte* arr, int length, byte val)
+    {
+        for (int i = 0; i < length; i++)
+            if (arr[i] == val)
+                return true;
+        return false;
+    }
+
+    [MethImpl(AggressiveInlining)]
+    public static bool Contains(sbyte* arr, int length, sbyte val)
+    {
+        for (int i = 0; i < length; i++)
+            if (arr[i] == val)
+                return true;
+        return false;
+    }
+
+    [MethImpl(AggressiveInlining)]
+    public static bool Contains(char* arr, int length, char val)
+    {
+        for (int i = 0; i < length; i++)
+            if (arr[i] == val)
+                return true;
+        return false;
+    }
+
+    [MethImpl(AggressiveInlining)]
+    public static bool Contains(short* arr, int length, short val)
+    {
+        for (int i = 0; i < length; i++)
+            if (arr[i] == val)
+                return true;
+        return false;
+    }
+
+    [MethImpl(AggressiveInlining)]
+    public static bool Contains(ushort* arr, int length, ushort val)
+    {
+        for (int i = 0; i < length; i++)
+            if (arr[i] == val)
+                return true;
+        return false;
+    }
+
+    [MethImpl(AggressiveInlining)]
+    public static bool Contains(int* arr, int length, int val)
+    {
+        for (int i = 0; i < length; i++)
+            if (arr[i] == val)
+                return true;
+        return false;
+    }
+
+    [MethImpl(AggressiveInlining)]
+    public static bool Contains(uint* arr, int length, uint val)
+    {
+        for (int i = 0; i < length; i++)
+            if (arr[i] == val)
+                return true;
+        return false;
+    }
+
+    [MethImpl(AggressiveInlining)]
+    public static bool Contains(long* arr, int length, long val)
+    {
+        for (int i = 0; i < length; i++)
+            if (arr[i] == val)
+                return true;
+        return false;
+    }
+
+    [MethImpl(AggressiveInlining)]
+    public static bool Contains(ulong* arr, int length, ulong val)
+    {
+        for (int i = 0; i < length; i++)
+            if (arr[i] == val)
+                return true;
+        return false;
+    }
+
+    [MethImpl(AggressiveInlining)]
+    public static bool Contains(float* arr, int length, float val)
+    {
+        for (int i = 0; i < length; i++)
+            if (arr[i] == val)
+                return true;
+        return false;
+    }
+
+    [MethImpl(AggressiveInlining)]
+    public static bool Contains(double* arr, int length, double val)
+    {
+        for (int i = 0; i < length; i++)
+            if (arr[i] == val)
+                return true;
+        return false;
+    }
+
+    [MethImpl(AggressiveInlining)]
+    public static int IndexOf(bool* arr, int length, bool val)
+    {
+        for (int i = 0; i < length; i++)
+            if (arr[i] == val)
+                return i;
+        return -1;
+    }
+
+    [MethImpl(AggressiveInlining)]
+    public static int IndexOf(byte* arr, int length, byte val)
+    {
+        for (int i = 0; i < length; i++)
+            if (arr[i] == val)
+                return i;
+        return -1;
+    }
+
+    [MethImpl(AggressiveInlining)]
+    public static int IndexOf(sbyte* arr, int length, sbyte val)
+    {
+        for (int i = 0; i < length; i++)
+            if (arr[i] == val)
+                return i;
+        return -1;
+    }
+
+    [MethImpl(AggressiveInlining)]
+    public static int IndexOf(char* arr, int length, char val)
+    {
+        for (int i = 0; i < length; i++)
+            if (arr[i] == val)
+                return i;
+        return -1;
+    }
+
+    [MethImpl(AggressiveInlining)]
+    public static int IndexOf(short* arr, int length, short val)
+    {
+        for (int i = 0; i < length; i++)
+            if (arr[i] == val)
+                return i;
+        return -1;
+    }
+
+    [MethImpl(AggressiveInlining)]
+    public static int IndexOf(ushort* arr, int length, ushort val)
+    {
+        for (int i = 0; i < length; i++)
+            if (arr[i] == val)
+                return i;
+        return -1;
+    }
+
+    [MethImpl(AggressiveInlining)]
+    public static int IndexOf(int* arr, int length, int val)
+    {
+        for (int i = 0; i < length; i++)
+            if (arr[i] == val)
+                return i;
+        return -1;
+    }
+
+    [MethImpl(AggressiveInlining)]
+    public static int IndexOf(uint* arr, int length, uint val)
+    {
+        for (int i = 0; i < length; i++)
+            if (arr[i] == val)
+                return i;
+        return -1;
+    }
+
+    [MethImpl(AggressiveInlining)]
+    public static int IndexOf(long* arr, int length, long val)
+    {
+        for (int i = 0; i < length; i++)
+            if (arr[i] == val)
+                return i;
+        return -1;
+    }
+
+    [MethImpl(AggressiveInlining)]
+    public static int IndexOf(ulong* arr, int length, ulong val)
+    {
+        for (int i = 0; i < length; i++)
+            if (arr[i] == val)
+                return i;
+        return -1;
+    }
+
+    [MethImpl(AggressiveInlining)]
+    public static int IndexOf(float* arr, int length, float val)
+    {
+        for (int i = 0; i < length; i++)
+            if (arr[i] == val)
+                return i;
+        return -1;
+    }
+
+    [MethImpl(AggressiveInlining)]
+    public static int IndexOf(double* arr, int length, double val)
+    {
+        for (int i = 0; i < length; i++)
+            if (arr[i] == val)
+                return i;
+        return -1;
+    }
 }

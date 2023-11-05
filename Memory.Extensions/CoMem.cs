@@ -18,6 +18,7 @@ public sealed unsafe class CoMem : IDisposable
     }
 
     public byte* Ptr;
+    public char* CharPtr => (char*)Ptr;
 
     public static explicit operator void*(CoMem co) => co.Ptr;
     public static explicit operator byte*(CoMem co) => co.Ptr;
