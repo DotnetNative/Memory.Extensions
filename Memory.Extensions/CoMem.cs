@@ -20,9 +20,9 @@ public sealed unsafe class CoMem : IDisposable
     public byte* Ptr;
     public char* CharPtr => (char*)Ptr;
 
-    public static explicit operator void*(CoMem co) => co.Ptr;
-    public static explicit operator byte*(CoMem co) => co.Ptr;
-    public static explicit operator nint(CoMem co) => (nint)co.Ptr;
+    public static implicit operator void*(CoMem co) => co.Ptr;
+    public static implicit operator byte*(CoMem co) => co.Ptr;
+    public static implicit operator nint(CoMem co) => (nint)co.Ptr;
 
     #region Dispose
     public void MarkAsDisposed() => isDisposed = true;
@@ -50,9 +50,9 @@ internal sealed unsafe class CoMem<T> : IDisposable where T : unmanaged
 
     public T* Ptr;
 
-    public static explicit operator void*(CoMem<T> co) => co.Ptr;
-    public static explicit operator T*(CoMem<T> co) => co.Ptr;
-    public static explicit operator nint(CoMem<T> co) => (nint)co.Ptr;
+    public static implicit operator void*(CoMem<T> co) => co.Ptr;
+    public static implicit operator T*(CoMem<T> co) => co.Ptr;
+    public static implicit operator nint(CoMem<T> co) => (nint)co.Ptr;
 
     #region Dispose
     bool isDisposed;
