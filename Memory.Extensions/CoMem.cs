@@ -42,10 +42,9 @@ public sealed unsafe class CoMem : IDisposable
     #endregion
 }
 
-internal sealed unsafe class CoMem<T> : IDisposable where T : unmanaged
+public sealed unsafe class CoMem<T> : IDisposable where T : unmanaged
 {
     public CoMem(T obj) => Ptr = NewAlloc(obj);
-
     public CoMem(T[] arr) => Ptr = AllocFrom(arr);
 
     public T* Ptr;
