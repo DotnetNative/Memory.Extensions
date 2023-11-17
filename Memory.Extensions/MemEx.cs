@@ -38,6 +38,14 @@ public unsafe static class MemEx
     public static T* Alloc<T>(int count) where T : unmanaged => (T*)Marshal.AllocCoTaskMem(count * sizeof(T));
 
     [MethImpl(AggressiveInlining)]
+    public static T* AllocFrom<T>(ReadOnlySpan<T> arr) where T : unmanaged
+    {
+        var ptr = Alloc<T>(arr.Length);
+        Copy(ptr, arr);
+        return ptr;
+    }
+
+    [MethImpl(AggressiveInlining)]
     public static T* AllocFrom<T>(T[] arr) where T : unmanaged
     {
         var ptr = Alloc<T>(arr.Length);
@@ -66,6 +74,14 @@ public unsafe static class MemEx
     public static void Copy(void* to, void* from, int len) => Buffer.MemoryCopy(from, to, len, len);
 
     [MethImpl(AggressiveInlining)]
+    public static void Copy<T>(void* to, ReadOnlySpan<T> from) where T : unmanaged
+    {
+        int length = sizeof(T) * from.Length;
+        fixed (void* fromPtr = from)
+            Buffer.MemoryCopy(fromPtr, to, length, length);
+    }
+
+    [MethImpl(AggressiveInlining)]
     public static void Copy<T>(void* to, T[] from) where T : unmanaged
     {
         int length = sizeof(T) * from.Length;
@@ -74,11 +90,28 @@ public unsafe static class MemEx
     }
 
     [MethImpl(AggressiveInlining)]
+    public static void Copy<T, T2>(ReadOnlySpan<T> to, ReadOnlySpan<T2> from, int len) where T : unmanaged where T2 : unmanaged
+    {
+        fixed (void* fromPtr = from)
+        fixed (void* toPtr = to)
+            Buffer.MemoryCopy(fromPtr, toPtr, len, len);
+    }
+
+    [MethImpl(AggressiveInlining)]
     public static void Copy<T, T2>(T[] to, T2[] from, int len) where T : unmanaged where T2 : unmanaged
     {
         fixed (void* fromPtr = from)
         fixed (void* toPtr = to)
             Buffer.MemoryCopy(fromPtr, toPtr, len, len);
+    }
+
+    [MethImpl(AggressiveInlining)]
+    public static void Copy<T, T2>(ReadOnlySpan<T> to, ReadOnlySpan<T2> from) where T : unmanaged where T2 : unmanaged
+    {
+        int length = sizeof(T2) * from.Length;
+        fixed (void* fromPtr = from)
+        fixed (void* toPtr = to)
+            Buffer.MemoryCopy(fromPtr, toPtr, length, length);
     }
 
     [MethImpl(AggressiveInlining)]
@@ -91,10 +124,25 @@ public unsafe static class MemEx
     }
 
     [MethImpl(AggressiveInlining)]
+    public static void Copy<T>(ReadOnlySpan<T> to, void* from, int len) where T : unmanaged
+    {
+        fixed (void* toPtr = to)
+            Buffer.MemoryCopy(from, toPtr, len, len);
+    }
+
+    [MethImpl(AggressiveInlining)]
     public static void Copy<T>(T[] to, void* from, int len) where T : unmanaged
     {
         fixed (void* toPtr = to)
             Buffer.MemoryCopy(from, toPtr, len, len);
+    }
+
+    [MethImpl(AggressiveInlining)]
+    public static void Copy<T>(ReadOnlySpan<T> to, void* from) where T : unmanaged
+    {
+        int length = sizeof(T) * to.Length;
+        fixed (void* toPtr = to)
+            Buffer.MemoryCopy(from, toPtr, length, length);
     }
 
     [MethImpl(AggressiveInlining)]
