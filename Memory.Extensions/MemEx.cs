@@ -231,6 +231,52 @@ public unsafe static class MemEx
             return Compare(arr, ptr, len);
     }
 
+
+    [MethImpl(AggressiveInlining)]
+    public static bool Compare(ReadOnlySpan<byte> arr, byte[] with, int len)
+    {
+        fixed (void* withPtr = with)
+        fixed (void* ptr = arr)
+            return Compare(ptr, withPtr, len);
+    }
+
+    [MethImpl(AggressiveInlining)]
+    public static bool Compare(byte[] arr, ReadOnlySpan<byte> with)
+    {
+        fixed (void* withPtr = with)
+        fixed (void* ptr = arr)
+            return Compare(ptr, withPtr, with.Length);
+    }
+
+    [MethImpl(AggressiveInlining)]
+    public static bool Compare(ReadOnlySpan<byte> arr, ReadOnlySpan<byte> with)
+    {
+        fixed (void* withPtr = with)
+        fixed (void* ptr = arr)
+            return Compare(ptr, withPtr, with.Length);
+    }
+
+    [MethImpl(AggressiveInlining)]
+    public static bool Compare(void* ptr, ReadOnlySpan<byte> with)
+    {
+        fixed (void* withPtr = with)
+            return Compare(ptr, withPtr, with.Length);
+    }
+
+    [MethImpl(AggressiveInlining)]
+    public static bool Compare(ReadOnlySpan<byte> arr, byte* with, int len)
+    {
+        fixed (void* ptr = arr)
+            return Compare(ptr, with, len);
+    }
+
+    [MethImpl(AggressiveInlining)]
+    public static bool Compare(byte* arr, ReadOnlySpan<byte> with, int len)
+    {
+        fixed (void* ptr = with)
+            return Compare(arr, ptr, len);
+    }
+
     [MethImpl(AggressiveInlining)]
     public static bool Contains<T>(T* arr, int length, T val) where T : unmanaged
     {
