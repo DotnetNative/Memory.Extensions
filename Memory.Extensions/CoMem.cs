@@ -1,6 +1,4 @@
-﻿using System.Runtime.InteropServices;
-
-namespace Memory;
+﻿namespace Memory;
 public sealed unsafe class CoMem : IDisposable
 {
     public CoMem(string str, CoStrType charSet = CoStrType.Utf8)
@@ -8,13 +6,13 @@ public sealed unsafe class CoMem : IDisposable
 
     void Alloc(string str, CoStrType charSet)
     {
-        if (charSet == CoStrType.Utf8)
-            Ptr = (byte*)Marshal.StringToCoTaskMemUTF8(str);
-        else if (charSet == CoStrType.Ansi)
-            Ptr = (byte*)Marshal.StringToCoTaskMemAnsi(str);
-        else if (charSet == CoStrType.Auto)
-            Ptr = (byte*)Marshal.StringToCoTaskMemAuto(str);
-        else Ptr = (byte*)Marshal.StringToCoTaskMemUni(str);
+        Ptr = (byte*)(charSet switch
+        {
+            CoStrType.Utf8 => Marshal.StringToCoTaskMemUTF8(str),
+            CoStrType.Ansi => Marshal.StringToCoTaskMemAnsi(str),
+            CoStrType.Auto => Marshal.StringToCoTaskMemAuto(str),
+            CoStrType.Uni => Marshal.StringToCoTaskMemUni(str)
+        });
     }
 
     public byte* Ptr;
@@ -23,8 +21,9 @@ public sealed unsafe class CoMem : IDisposable
     public static implicit operator void*(CoMem co) => co.Ptr;
     public static implicit operator byte*(CoMem co) => co.Ptr;
     public static implicit operator nint(CoMem co) => (nint)co.Ptr;
+    public static implicit operator pointer(CoMem co) => co.Ptr;
 
-    #region Dispose
+    #region IDisposable
     public void MarkAsDisposed() => isDisposed = true;
 
     bool isDisposed;
@@ -52,8 +51,9 @@ public sealed unsafe class CoMem<T> : IDisposable where T : unmanaged
     public static implicit operator void*(CoMem<T> co) => co.Ptr;
     public static implicit operator T*(CoMem<T> co) => co.Ptr;
     public static implicit operator nint(CoMem<T> co) => (nint)co.Ptr;
+    public static implicit operator pointer(CoMem<T> co) => co.Ptr;
 
-    #region Dispose
+    #region IDisposable
     bool isDisposed;
     public void Dispose()
     {

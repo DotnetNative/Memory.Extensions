@@ -1,13 +1,7 @@
-﻿global using static Memory.MemEx;
-
-using System.Runtime.InteropServices;
-
-using MethImpl = System.Runtime.CompilerServices.MethodImplAttribute;
-using static System.Runtime.CompilerServices.MethodImplOptions;
-
-namespace Memory;
+﻿namespace Memory;
 public unsafe static class MemEx
 {
+    #region Allocate
     [MethImpl(AggressiveInlining)]
     public static T* New<T>() where T : unmanaged => Alloc<T>();
     [MethImpl(AggressiveInlining)]
@@ -33,7 +27,7 @@ public unsafe static class MemEx
     public static T* Alloc<T>() where T : unmanaged => (T*)Marshal.AllocCoTaskMem(sizeof(T));
 
     [MethImpl(AggressiveInlining)]
-    public static byte* Alloc(int count) => (byte*)Marshal.AllocCoTaskMem(count);
+    public static pointer Alloc(int count) => (byte*)Marshal.AllocCoTaskMem(count);
     [MethImpl(AggressiveInlining)]
     public static T* Alloc<T>(int count) where T : unmanaged => (T*)Marshal.AllocCoTaskMem(count * sizeof(T));
 
@@ -52,29 +46,35 @@ public unsafe static class MemEx
         Copy(ptr, arr);
         return ptr;
     }
+    #endregion
 
+    #region Free
     [MethImpl(AggressiveInlining)]
-    public static void Free(void* ptr) => Marshal.FreeCoTaskMem((nint)ptr);
+    public static void Free(pointer ptr) => Marshal.FreeCoTaskMem((nint)ptr);
     [MethImpl(AggressiveInlining)]
-    public static void Free(params void*[] ptrs)
+    public static void Free(params pointer[] ptrs)
     {
         foreach (var ptr in ptrs)
             Marshal.FreeCoTaskMem((nint)ptr);
     }
-    [MethImpl(AggressiveInlining)]
-    public static void Free(nint addr) => Marshal.FreeCoTaskMem(addr);
+    #endregion
 
+    #region NULL
     [MethImpl(AggressiveInlining)]
     public static T* NULL<T>() where T : unmanaged => (T*)0;
+    #endregion
 
+    #region Pin
     [MethImpl(AggressiveInlining)]
     public static GCHandle Pin<T>(T[] arr) where T : unmanaged => GCHandle.Alloc(arr, GCHandleType.Pinned);
+    #endregion
+
+    #region Copy
+    [MethImpl(AggressiveInlining)]
+    public static void Copy(pointer to, pointer from, int len) => Buffer.MemoryCopy(from, to, len, len);
 
     [MethImpl(AggressiveInlining)]
-    public static void Copy(void* to, void* from, int len) => Buffer.MemoryCopy(from, to, len, len);
-
-    [MethImpl(AggressiveInlining)]
-    public static void Copy<T>(void* to, ReadOnlySpan<T> from) where T : unmanaged
+    public static void Copy<T>(pointer to, ReadOnlySpan<T> from) where T : unmanaged
     {
         int length = sizeof(T) * from.Length;
         fixed (void* fromPtr = from)
@@ -82,7 +82,7 @@ public unsafe static class MemEx
     }
 
     [MethImpl(AggressiveInlining)]
-    public static void Copy<T>(void* to, T[] from) where T : unmanaged
+    public static void Copy<T>(pointer to, T[] from) where T : unmanaged
     {
         int length = sizeof(T) * from.Length;
         fixed (void* fromPtr = from)
@@ -124,37 +124,39 @@ public unsafe static class MemEx
     }
 
     [MethImpl(AggressiveInlining)]
-    public static void Copy<T>(ReadOnlySpan<T> to, void* from, int len) where T : unmanaged
+    public static void Copy<T>(ReadOnlySpan<T> to, pointer from, int len) where T : unmanaged
     {
         fixed (void* toPtr = to)
             Buffer.MemoryCopy(from, toPtr, len, len);
     }
 
     [MethImpl(AggressiveInlining)]
-    public static void Copy<T>(T[] to, void* from, int len) where T : unmanaged
+    public static void Copy<T>(T[] to, pointer from, int len) where T : unmanaged
     {
         fixed (void* toPtr = to)
             Buffer.MemoryCopy(from, toPtr, len, len);
     }
 
     [MethImpl(AggressiveInlining)]
-    public static void Copy<T>(ReadOnlySpan<T> to, void* from) where T : unmanaged
+    public static void Copy<T>(ReadOnlySpan<T> to, pointer from) where T : unmanaged
     {
-        int length = sizeof(T) * to.Length;
+        var length = sizeof(T) * to.Length;
         fixed (void* toPtr = to)
             Buffer.MemoryCopy(from, toPtr, length, length);
     }
 
     [MethImpl(AggressiveInlining)]
-    public static void Copy<T>(T[] to, void* from) where T : unmanaged
+    public static void Copy<T>(T[] to, pointer from) where T : unmanaged
     {
-        int length = sizeof(T) * to.Length;
+        var length = sizeof(T) * to.Length;
         fixed (void* toPtr = to)
             Buffer.MemoryCopy(from, toPtr, length, length);
     }
+    #endregion
 
+    #region Read
     [MethImpl(AggressiveInlining)]
-    public static byte[] Read(void* ptr, int len)
+    public static byte[] Read(pointer ptr, int len)
     {
         var bytes = new byte[len];
         Copy(bytes, ptr);
@@ -162,29 +164,35 @@ public unsafe static class MemEx
     }
 
     [MethImpl(AggressiveInlining)]
-    public static T[] Read<T>(void* ptr, int len) where T : unmanaged
+    public static T[] Read<T>(pointer ptr, int len) where T : unmanaged
     {
         var bytes = new T[len];
         Copy(bytes, ptr);
         return bytes;
     }
+    #endregion
 
+    #region WriteStruct
     [MethImpl(AggressiveInlining)]
-    public static void WriteStruct<T>(T str, void* ptr) where T : unmanaged => Copy(&str, ptr, sizeof(T));
+    public static void WriteStruct<T>(T str, pointer ptr) where T : unmanaged => Copy(&str, ptr, sizeof(T));
     [MethImpl(AggressiveInlining)]
     public static void WriteStruct<T>(T str, byte[] arr) where T : unmanaged
     {
         fixed (byte* ptr = arr)
             WriteStruct(str, ptr);
     }
+    #endregion
 
+    #region ReadStruct
     [MethImpl(AggressiveInlining)]
     public static byte[] ReadStruct<T>(T str) where T : unmanaged => Read<byte>(&str, sizeof(T));
+    #endregion
 
+    #region Compare
     [MethImpl(AggressiveInlining)]
     public static bool Compare(byte* ptr, byte* with, int len)
     {
-        for (int i = 0; i < len; i++)
+        for (var i = 0; i < len; i++)
             if (ptr[i] != with[i])
                 return false;
 
@@ -192,10 +200,10 @@ public unsafe static class MemEx
     }
 
     [MethImpl(AggressiveInlining)]
-    public static bool Compare(void* ptr, void* with, int len) => Compare((byte*)ptr, (byte*)with, len);
+    public static bool Compare(pointer ptr, pointer with, int len) => Compare((byte*)ptr, (byte*)with, len);
 
     [MethImpl(AggressiveInlining)]
-    public static bool Compare(void* ptr, byte[] with)
+    public static bool Compare(pointer ptr, byte[] with)
     {
         fixed (void* withPtr = with)
             return Compare(ptr, withPtr, with.Length);
@@ -231,7 +239,6 @@ public unsafe static class MemEx
             return Compare(arr, ptr, len);
     }
 
-
     [MethImpl(AggressiveInlining)]
     public static bool Compare(ReadOnlySpan<byte> arr, byte[] with, int len)
     {
@@ -257,7 +264,7 @@ public unsafe static class MemEx
     }
 
     [MethImpl(AggressiveInlining)]
-    public static bool Compare(void* ptr, ReadOnlySpan<byte> with)
+    public static bool Compare(pointer ptr, ReadOnlySpan<byte> with)
     {
         fixed (void* withPtr = with)
             return Compare(ptr, withPtr, with.Length);
@@ -280,18 +287,21 @@ public unsafe static class MemEx
     [MethImpl(AggressiveInlining)]
     public static bool Contains<T>(T* arr, int length, T val) where T : unmanaged
     {
-        for (int i = 0; i < length; i++)
+        for (var i = 0; i < length; i++)
             if (arr[i].Equals(val))
                 return true;
         return false;
     }
+    #endregion
 
+    #region IndexOf
     [MethImpl(AggressiveInlining)]
     public static int IndexOf<T>(T* arr, int length, T val) where T : unmanaged
     {
-        for (int i = 0; i < length; i++)
+        for (var i = 0; i < length; i++)
             if (arr[i].Equals(val))
                 return i;
         return -1;
     }
+    #endregion
 }
