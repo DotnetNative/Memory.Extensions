@@ -43,15 +43,15 @@
     <Using Include="System.Runtime.InteropServices" />
   </ItemGroup>
   <ItemGroup>
-	<None Include="LICENSE.txt">
-		<Pack>true</Pack>
-		<PackagePath></PackagePath>
-		<Visible>True</Visible>
-	</None>
 	<None Include="PACK.md">
 		<Pack>true</Pack>
 		<PackagePath></PackagePath>
-		<Visible>True</Visible>
+		<Visible>False</Visible>
 	</None>
+        <None Include="..\LICENSE.txt">
+          <Pack>true</Pack>
+          <PackagePath></PackagePath>
+          <Visible>False</Visible>
+      </None>
   </ItemGroup>
 </Project>
