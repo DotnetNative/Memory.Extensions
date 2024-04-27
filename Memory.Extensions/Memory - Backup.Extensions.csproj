@@ -6,7 +6,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PackageId>Yotic.Memory.Extensions</PackageId>
     <Title>Memory.Extensions</Title>
-    <Version>2.0.1</Version>
+    <Version>2.0.2</Version>
     <Authors>Yotic</Authors>
     <Company></Company>
     <Description>Memory utils for convenient work with memory, arrays and pointers</Description>
