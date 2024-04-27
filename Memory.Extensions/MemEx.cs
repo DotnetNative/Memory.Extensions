@@ -55,13 +55,8 @@ public unsafe static class MemEx
     public static void Free(params pointer[] ptrs)
     {
         foreach (var ptr in ptrs)
-            Marshal.FreeCoTaskMem((nint)ptr);
+            Marshal.FreeCoTaskMem(*(nint*)&ptr);
     }
-    #endregion
-
-    #region NULL
-    [MethImpl(AggressiveInlining)]
-    public static T* NULL<T>() where T : unmanaged => (T*)0;
     #endregion
 
     #region Pin
