@@ -33,3 +33,12 @@ using CoMem strCo = new CoMem(managedString, CoStrType.Uni);
 ushort* unmanagedStringPtr = (ushort*)strCo;
 //...
 ```
+
+Versions
+------------------------------
+| Start ordinal | Framework | Description                  | Date         |
+| ---           | ---       | ---                          | ---          |
+| 2.0.1         | .net8.0   | Added MIT License            | Apr 28, 2024 |
+| 2.0.0         | .net8.0   | Switched to DotnetNativeBase | Apr 25, 2024 |
+| 1.1.0         | .net8.0   | Changed framework            | Nov 15, 2023 |
+| 1.0.0         | .net7.0   |                              | Sep 5, 2024  |
