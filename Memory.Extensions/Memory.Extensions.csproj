@@ -28,7 +28,7 @@
     <None Remove="obj\**" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="DotnetNativeBase" Version="1.0.3" />
+    <PackageReference Include="DotnetNativeBase" Version="1.0.4" />
   </ItemGroup>
   <ItemGroup>
     <Using Include="Memory.MemEx">
